@@ -2,18 +2,19 @@
 document.addEventListener('DOMContentLoaded',function(){
     let header = document.querySelector('h1');
     let wikiText = document.getElementById('wikiText');
-    let page = 'A';
-    chrome.runtime.onMessage.addListener(function(message,sender, sendResponse){
+    let page = '';
+    chrome.runtime.onMessage.addListener(function(message){
         if(message.from == 'background') page = message.message;
         //header.innerHTML = message.message;
-        console.log(message);
+        //console.log(message);
         getStuff();
     })
     
     
     function populate(data){
         //console.log(data['parse']['text']['*'].querySelectorAll('i'));
-        header.innerHTML = data['parse']['title'];
+        header.innerHTML = data['parse']['title']
+        
         wikiText.innerHTML = data['parse']['text']['*'];
         const allImg = wikiText.querySelectorAll('i');
         
@@ -30,7 +31,8 @@ document.addEventListener('DOMContentLoaded',function(){
         .then(function(data){
             console.log(data);
             populate(data);
-        });
+        })
+        .catch(header.innerHTML = 'page not found');
     }
     
     
